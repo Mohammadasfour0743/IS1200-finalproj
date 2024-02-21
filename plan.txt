@@ -1,0 +1,46 @@
+to do:
+-implement crash system
+-implement score system to show up on leds.
+-change rocketmove to not depend on right button
+-implement difficulty
+-implement shooting, optional
+
+
+
+
+
+functions:
+moveup: to move the ship up
+
+movedown: to move down
+
+crash: to check for a crash. 1 if there is a crash, 0 if not
+
+rocketsspawn: spawns rockets randomly
+
+rocketsmove: moves rockets to the left. 
+it moves the whole screen to the left, except the part that contains the spaceship
+
+to make:
+shoot: moving the bullet to the left and check for crash. if crash, erase rocket
+
+
+Display elements:
+Battlefield: covers the whole display.
+consists of 512 (128 * 4) elements, each 8 bits.
+to access the current position: 128 * pos (pos is page number, controlled by button input in labwork function)
+
+initial: initial condition of Battlefield.
+
+spaceship: 16 element. 16 represents how long it is horizantally.
+
+rockets: 16 elements. represents obstacles to avoid
+
+erase: 16 elements. all 255 to turn off respective pixels.
+
+
+menu:
+Press L to start, R to change difficulty
+changing difficulty spawns more rockets and makes them faster
+
+
