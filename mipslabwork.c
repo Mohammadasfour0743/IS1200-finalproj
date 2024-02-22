@@ -172,7 +172,7 @@ int spawn = 0;
 
 char clear[] = " ";
 char line1[] = "Welcome Aboard!";
-char line2[] = "Press 2 to start";
+char line2[] = "2 - start";
 
 char lost1[] = "YOU DIED";
 char lost2[] = "2 to continue";
@@ -196,21 +196,23 @@ void user_isr( void )
       display_string(0, lost1);
       display_string(1, lost2);
       display_update();
-      T2CONSET = 0x8000;
       
-      /*
+      
+      
       if (getbtns() & 0x1){
         gameOver = 0;
         menu = 1;
         int i;
-        for (i = 0; i < 512; i++){
+        for (i = 0; i < 511; i++){
           battlefield[i] = Reset[i];
         }
+        delay(150);
         
-        T2CONSET = 0x8000;
       } 
-        */
-      
+	  
+       
+      T2CONSET = 0x8000;
+	  
     }
 
     while(menu){
@@ -236,8 +238,8 @@ void user_isr( void )
    
   } 
 
-  gameOver = crash(page);
-
+ 
+   gameOver = crash(page);
   
   if (spawn == 20){
   rocketsspawn(random);

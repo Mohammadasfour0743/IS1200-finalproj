@@ -1,8 +1,7 @@
 to do:
--implement crash system
--implement score system to show up on leds.
 -change rocketmove to not depend on right button
 -implement difficulty
+-implement score system to show up on leds.
 -implement shooting, optional
 
 
