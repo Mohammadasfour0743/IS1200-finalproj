@@ -170,6 +170,8 @@ int page = 0;
 int random = 0;
 int spawn = 0;
 
+int moveR = 0;
+
 char clear[] = " ";
 char line1[] = "Welcome Aboard!";
 char line2[] = "2 - start";
@@ -187,7 +189,10 @@ void user_isr( void )
   if (IFS(0) & (1<<8)) { //interrupt flag. activated when an interrupt is detected. 8th bit is the important one
     
     IFS(0) = 0;
+	moveR++;
+	timeout++;
 
+	/*
     while (gameOver){
 
       
@@ -197,16 +202,15 @@ void user_isr( void )
       display_string(1, lost2);
       display_update();
       
-      
-      
       if (getbtns() & 0x1){
         gameOver = 0;
         menu = 1;
+		page = 0;
         int i;
         for (i = 0; i < 511; i++){
           battlefield[i] = Reset[i];
         }
-        delay(150);
+        delay(200);
         
       } 
 	  
@@ -214,7 +218,7 @@ void user_isr( void )
       T2CONSET = 0x8000;
 	  
     }
-
+	*/
     while(menu){
       T2CONCLR = 0x8000;
       
@@ -229,7 +233,7 @@ void user_isr( void )
         menu = 0;
         T2CONSET = 0x8000;
         
-        break;
+        
       }
 
 
@@ -238,11 +242,22 @@ void user_isr( void )
    
   } 
 
+	
  
    gameOver = crash(page);
+
+
+	if (moveR == 2){
+		
+		
+		moveR = 0;
+	}
   
   if (spawn == 20){
   rocketsspawn(random);
+ 
+
+  
   spawn = 0;
   }
 spawn++;
@@ -288,7 +303,7 @@ int movedown(int page){
    
     int i;
     for (i =0; i < 16; i++) {
-    battlefield[i + (128 * (page))] = spaceship[i];
+    battlefield[i + (128 * page)] = spaceship[i];
     battlefield[i + (128 * (page - 1))] = erase[i];
     }
   
@@ -308,7 +323,7 @@ int moveup(int page){
 int rocketsspawn(int page){
   int i =0;
   for (i = 0; i < 16; i++){
-    battlefield[112 + i + (128 * page)] = rockets[i];
+    battlefield[96 + i + (128 * page)] = rockets[i];
   }
   display_image(0, battlefield);
 }
@@ -358,7 +373,8 @@ void labwork( void )
       moveup(page);
       delay(150);
       random++;
-      rocketsmove();
+	  rocketsmove();
+      
       
     }
     break;
@@ -368,10 +384,15 @@ void labwork( void )
       page++;
       movedown(page);
       delay(150);
+	  random++;
+	  rocketsmove();
+	  break;
       
     }
     
   }
+
+  
 
 
   if (random == 3){

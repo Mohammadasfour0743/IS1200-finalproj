@@ -1,5 +1,8 @@
 to do:
+
+-improve spawn system
 -change rocketmove to not depend on right button
+-fix screen
 -implement difficulty
 -implement score system to show up on leds.
 -implement shooting, optional
