@@ -1,7 +1,8 @@
 to do:
--implement random and modify difficulty according
--debug screen 
 -implement score system to show up on leds.
+-choose between: Random spawn vs targeted spawn.
+-adjust spawn and spawn2 accordingly 
+
 
 
 
