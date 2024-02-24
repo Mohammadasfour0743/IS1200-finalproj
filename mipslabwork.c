@@ -165,6 +165,8 @@ const uint8_t const rockets[] = {
 	231, 195, 195, 195, 195, 0, 0, 0,
 };
 
+
+
 int menu = 1;
 int page = 0;
 int random = 0;
@@ -172,9 +174,12 @@ int spawn = 0;
 
 int moveR = 0;
 
+char diffdis[] = "dif    text, texttexttext";
+
 char clear[] = " ";
 char line1[] = "Welcome Aboard!";
 char line2[] = "2 - start";
+char line3[] = "Difficulty: ";
 
 char lost1[] = "YOU DIED";
 char lost2[] = "2 to continue";
@@ -182,6 +187,7 @@ char lost2[] = "2 to continue";
 int gameOver = 0;
 
 int timeout = 0;
+int diff = 1;
 /* Interrupt Service Routine */
 void user_isr( void )
 {
@@ -192,7 +198,49 @@ void user_isr( void )
 	moveR++;
 	timeout++;
 
-	/*
+
+	while(menu){
+      T2CONCLR = 0x8000;
+
+	  switch (getbtns()) {
+		case 0x2:
+			if (diff > 1){
+				diff -= 1;
+				delay(200);
+			}
+			break;
+
+		case 0x4:
+			if (diff < 3){
+				diff += 1;
+				delay(200);
+			}
+
+
+	  }
+      
+      
+      display_string(0, line1);
+      display_string(1, line2);
+	  display_string(2, line3);
+	  time2string(diffdis, diff);
+	  display_string(3, diffdis);
+      display_update();
+
+      if (getbtns() & 0x1){
+        display_string(0, clear);
+        display_string(1, clear);
+		display_string(2, clear);
+		display_string(3, clear);
+        menu = 0;
+        T2CONSET = 0x8000;
+        
+        
+      }
+
+
+    }
+	
     while (gameOver){
 
       
@@ -200,6 +248,7 @@ void user_isr( void )
       T2CONCLR = 0x8000;
       display_string(0, lost1);
       display_string(1, lost2);
+	  
       display_update();
       
       if (getbtns() & 0x1){
@@ -207,7 +256,7 @@ void user_isr( void )
         menu = 1;
 		page = 0;
         int i;
-        for (i = 0; i < 511; i++){
+        for (i = 0; i < 512; i++){
           battlefield[i] = Reset[i];
         }
         delay(200);
@@ -218,50 +267,37 @@ void user_isr( void )
       T2CONSET = 0x8000;
 	  
     }
+	/*
+	switch (diff) {
+		case 1:
+			
+
+	}
+
 	*/
-    while(menu){
-      T2CONCLR = 0x8000;
-      
-      
-      display_string(0, line1);
-      display_string(1, line2);
-      display_update();
-
-      if (getbtns() & 0x1){
-        display_string(0, clear);
-        display_string(1, clear);
-        menu = 0;
-        T2CONSET = 0x8000;
-        
-        
-      }
-
-
-    }
-
+	
+    
+	
+	
    
   } 
+  gameOver = crash();
 
-	
  
-   gameOver = crash(page);
-
-
-	if (moveR == 2){
-		
-		
-		moveR = 0;
-	}
   
-  if (spawn == 20){
-  rocketsspawn(random);
- 
-
+  if (spawn == 10){
+  rocketsspawn(page);
+  crash();
   
   spawn = 0;
   }
-spawn++;
+ spawn++;
   return;
+
+
+	
+ 
+   
 }
 
 /* Lab-specific initialization goes here */
@@ -284,6 +320,7 @@ void labinit( void )
 IPC(2) |= 0x28; //set priority to 7. bits 2-4 correspond to Timer2, set them to 111.
 
 IFS(0) = 0;//clear interrupt flag so no previous interrupt is handle when interrupts are enabled
+
 
 
   enable_interrupt(); //enable interrupt globally. code found in labwork.s
@@ -352,6 +389,9 @@ int crash(page){
   if (battlefield[(128 * page) + 17] == 231){
     crashed = 1;
   }
+  else {
+	rocketsmove();
+  }
   
   return crashed;
 }
@@ -372,8 +412,9 @@ void labwork( void )
       page--;
       moveup(page);
       delay(150);
-      random++;
-	  rocketsmove();
+	  
+      
+	  //rocketsmove();
       
       
     }
@@ -384,20 +425,17 @@ void labwork( void )
       page++;
       movedown(page);
       delay(150);
-	  random++;
-	  rocketsmove();
-	  break;
+	  
+	  //rocketsmove();
+	  
       
     }
     
   }
-
+	
   
 
-
-  if (random == 3){
-    random = 0;
-  }
+  
   
 
   //display_update();

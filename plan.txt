@@ -1,10 +1,11 @@
 to do:
 
--improve spawn system
--change rocketmove to not depend on right button
--fix screen
--implement difficulty
+-continue difficulty implementation: make it functional in the switch case
+
+-fix spawn system
+
 -implement score system to show up on leds.
+- if screen problem stays, fix
 -implement shooting, optional
 
 

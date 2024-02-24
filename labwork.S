@@ -99,56 +99,27 @@ time2string:
   	
   	#NULL
   	li $t3, 0x00
-  	sb $t3, 5($a0)
+  	sb $t3, 2($a0)
   	
-  	PUSH $a0 #hide address then POP it when we need to store in the address (because $a0 is also the parameter for hexasc)
+  	 #hide address then POP it when we need to store in the address (because $a0 is also the parameter for hexasc)
   	
+
+	li $t3, 0x20
+	
+  	sb $t3, 1($a0)
   	#seconds right
+	PUSH $a0
   	
   	andi $t6, $a1, 0xf #isolate the LSB
   	or $a0, $t6, $zero #a0 has the LSB
   	jal hexasc #get the ascii for LSB
   	nop
   	POP $a0	
-  	sb $v0, 4($a0)
-  	
-  	PUSH $a0
-  	
-  	#seconds left
-	srl $a1, $a1, 4
-  	andi $t6, $a1, 0xf
-  	or $a0, $t6, $zero	
-  	jal hexasc
-  	nop
-  	POP $a0
-  	sb $v0, 3($a0)	
-  	
-  	# position of ":" :
-  	li $t4, 0x3A
-  	sb $t4, 2($a0)
-  	
-  	PUSH $a0
-  	#minutes right
-  	srl $a1, $a1, 4
-  	andi $t6, $a1, 0xf
-  	or $a0, $t6, $zero
-  	jal hexasc
-  	nop
-  	POP $a0
-  	sb $v0, 1($a0)
-  	PUSH $a0
-  	
-  	#minutes left
-  	srl $a1, $a1, 4
-  	andi $t6, $a1, 0xf
-  	or $a0, $t6, $zero
-  	
-  	jal hexasc
-  	nop
-  	
-  	POP $a0
-  
   	sb $v0, 0($a0)
+  	
+  	
+  	
+  	
   	
 
   	POP $ra
