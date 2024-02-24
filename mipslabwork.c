@@ -171,6 +171,7 @@ int menu = 1;
 int page = 0;
 int random = 0;
 int spawn = 0;
+int spawn2 = 0;
 
 int moveR = 0;
 
@@ -197,10 +198,19 @@ void user_isr( void )
     IFS(0) = 0;
 	moveR++;
 	timeout++;
+	spawn++;
+	
 
 
 	while(menu){
       T2CONCLR = 0x8000;
+
+	  display_string(0, line1);
+      display_string(1, line2);
+	  display_string(2, line3);
+	  time2string(diffdis, diff);
+	  display_string(3, diffdis);
+      display_update();
 
 	  switch (getbtns()) {
 		case 0x2:
@@ -218,14 +228,11 @@ void user_isr( void )
 
 
 	  }
+
+	  
       
       
-      display_string(0, line1);
-      display_string(1, line2);
-	  display_string(2, line3);
-	  time2string(diffdis, diff);
-	  display_string(3, diffdis);
-      display_update();
+      
 
       if (getbtns() & 0x1){
         display_string(0, clear);
@@ -267,37 +274,77 @@ void user_isr( void )
       T2CONSET = 0x8000;
 	  
     }
-	/*
+  
+  }
+
+	
+	
+	
+
 	switch (diff) {
 		case 1:
+			if (spawn == 25){
+				rocketsspawn(page);
+				gameOver = crash(page);
+				spawn = 0;
+			}
+			break;
+		
+		case 2:
+			if (spawn == 15){
+				rocketsspawn(page);
+				gameOver = crash(page);
+				spawn = 0;
+			}
+			break;
+		
+		case 3:
+			if (spawn == 10){
+				rocketsspawn(page);
+				gameOver = crash(page);
+				spawn = 0;
+			}
+			
 			
 
 	}
-
-	*/
 	
+	
+/*
+	if (timeout == 5){
+		display_image(0, battlefield);
+		timeout = 0;
+	}
+
+	if (spawn == 6 / diff){
+		if (spawn2 == 2){
+			rocketsspawn(page);
+			spawn2 = 0;
+		}
+		spawn2++;
+		spawn = 0;
+		rocketsmove();
+	}
+  
+*/
+	
+	gameOver = crash(page);
     
 	
 	
    
-  } 
-  gameOver = crash();
+   
+  
 
  
   
-  if (spawn == 10){
-  rocketsspawn(page);
-  crash();
   
-  spawn = 0;
-  }
- spawn++;
   return;
 
 
 	
  
-   
+  
 }
 
 /* Lab-specific initialization goes here */
@@ -360,7 +407,7 @@ int moveup(int page){
 int rocketsspawn(int page){
   int i =0;
   for (i = 0; i < 16; i++){
-    battlefield[96 + i + (128 * page)] = rockets[i];
+    battlefield[112 + i + (128 * page)] = rockets[i];
   }
   display_image(0, battlefield);
 }
@@ -389,9 +436,9 @@ int crash(page){
   if (battlefield[(128 * page) + 17] == 231){
     crashed = 1;
   }
-  else {
-	rocketsmove();
-  }
+  else {rocketsmove();}
+  
+  
   
   return crashed;
 }
@@ -400,7 +447,7 @@ int crash(page){
 void labwork( void )
 {
 
-
+ 
   
   
   display_image(0, battlefield);
@@ -438,7 +485,7 @@ void labwork( void )
   
   
 
-  //display_update();
+	
 
    
   
