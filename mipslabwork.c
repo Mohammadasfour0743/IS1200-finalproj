@@ -237,13 +237,14 @@ void user_isr( void )
 		display_string(3, clear);
         menu = 0;
         T2CONSET = 0x8000;
+		display_image(0, battlefield);
         
         
       }
 
 
     }
-	
+	gameOver = crash(page);
     while (gameOver){
 
       
@@ -276,9 +277,9 @@ void user_isr( void )
   
   }
 
-	gameOver = crash(page);
 	
-	
+	 
+  
 
 	switch (diff) {
 		case 1:
@@ -286,10 +287,11 @@ void user_isr( void )
 				
 				rocketsmove();
 				spawn = 0;
+				
 			}
-			if (spawn2 == 15){
+			if (spawn2 == 10){
 				rocketsspawn(page);
-				spawn2 = 0;
+				
 			}
 			break;
 		
@@ -298,6 +300,7 @@ void user_isr( void )
 				
 				rocketsmove();
 				spawn = 0;
+				
 			}
 			if (spawn2 == 10){
 				rocketsspawn(page);
@@ -310,31 +313,19 @@ void user_isr( void )
 				
 				rocketsmove();
 				spawn = 0;
+				
 			}
 			if (spawn2 == 5){
 				rocketsspawn(page);
 				spawn2 = 0;
+				
 			}
-			
-			
-			
+		
 
 	}
 	
 	
 	
-
-	
-	
-    
-	
-	
-   
-   
-  
-
- 
-  
   
   return;
 
@@ -447,7 +438,7 @@ void labwork( void )
  
   
   
-  display_image(0, battlefield);
+  
 
   switch (getbtns())
   {
@@ -470,22 +461,7 @@ void labwork( void )
     break;
   }
 	
-  
-
-  
-  
-
-	
-
-   
-  
  
-  
-  
-
-  
-
-  
 
 
 }
