@@ -199,6 +199,7 @@ void user_isr( void )
 	moveR++;
 	timeout++;
 	spawn++;
+	spawn2++;
 	
 
 
@@ -229,12 +230,7 @@ void user_isr( void )
 
 	  }
 
-	  
-      
-      
-      
-
-      if (getbtns() & 0x1){
+      if (getbtns() == 0x01){
         display_string(0, clear);
         display_string(1, clear);
 		display_string(2, clear);
@@ -258,77 +254,78 @@ void user_isr( void )
 	  
       display_update();
       
-      if (getbtns() & 0x1){
+      if (getbtns() == 0x1){
         gameOver = 0;
         menu = 1;
+		spawn = 0;
 		page = 0;
+		
+		
         int i;
         for (i = 0; i < 512; i++){
           battlefield[i] = Reset[i];
         }
         delay(200);
-        
+        T2CONSET = 0x8000;
       } 
 	  
        
-      T2CONSET = 0x8000;
+      
 	  
     }
   
   }
 
-	
+	gameOver = crash(page);
 	
 	
 
 	switch (diff) {
 		case 1:
-			if (spawn == 25){
-				rocketsspawn(page);
-				gameOver = crash(page);
+			if (spawn == 5){
+				
+				rocketsmove();
 				spawn = 0;
+			}
+			if (spawn2 == 15){
+				rocketsspawn(page);
+				spawn2 = 0;
 			}
 			break;
 		
 		case 2:
-			if (spawn == 15){
-				rocketsspawn(page);
-				gameOver = crash(page);
+			if (spawn == 3){
+				
+				rocketsmove();
 				spawn = 0;
+			}
+			if (spawn2 == 10){
+				rocketsspawn(page);
+				spawn2 = 0;
 			}
 			break;
 		
 		case 3:
-			if (spawn == 10){
-				rocketsspawn(page);
-				gameOver = crash(page);
+			if (spawn == 1){
+				
+				rocketsmove();
 				spawn = 0;
+			}
+			if (spawn2 == 5){
+				rocketsspawn(page);
+				spawn2 = 0;
 			}
 			
 			
+			
 
 	}
 	
 	
-/*
-	if (timeout == 5){
-		display_image(0, battlefield);
-		timeout = 0;
-	}
-
-	if (spawn == 6 / diff){
-		if (spawn2 == 2){
-			rocketsspawn(page);
-			spawn2 = 0;
-		}
-		spawn2++;
-		spawn = 0;
-		rocketsmove();
-	}
-  
-*/
 	
-	gameOver = crash(page);
+
+	
+	
     
 	
 	
@@ -344,7 +341,7 @@ void user_isr( void )
 
 	
  
-  
+   
 }
 
 /* Lab-specific initialization goes here */
@@ -407,7 +404,7 @@ int moveup(int page){
 int rocketsspawn(int page){
   int i =0;
   for (i = 0; i < 16; i++){
-    battlefield[112 + i + (128 * page)] = rockets[i];
+    battlefield[96 + i + (128 * page)] = rockets[i];
   }
   display_image(0, battlefield);
 }
@@ -417,7 +414,7 @@ int rocketsmove(void) {
   int i =0;
   int sections = 0;
   for (pages = 0; pages < 4; pages++){
-    for (sections = 1; sections < 7; sections++){ //devided the horizantal into 8 sections (16 * 8 = 128),
+    for (sections = 1; sections < 6; sections++){ //devided the horizantal into 8 sections (16 * 8 = 128),
    //and move everything except the section the spaceship is contained in
       for (i = 0; i < 16; i++){
         battlefield[i + 16 * sections + 128*pages] = battlefield[i + 16 * sections + 128*pages + 16];
@@ -431,12 +428,12 @@ int rocketsmove(void) {
   display_image(0, battlefield);
 }
 
-int crash(page){
+int crash(int page){
   int crashed = 0;
   if (battlefield[(128 * page) + 17] == 231){
     crashed = 1;
   }
-  else {rocketsmove();}
+  
   
   
   
@@ -459,11 +456,7 @@ void labwork( void )
       page--;
       moveup(page);
       delay(150);
-	  
-      
-	  //rocketsmove();
-      
-      
+	   
     }
     break;
 
@@ -473,11 +466,8 @@ void labwork( void )
       movedown(page);
       delay(150);
 	  
-	  //rocketsmove();
-	  
-      
     }
-    
+    break;
   }
 	
   

@@ -1,12 +1,9 @@
 to do:
-
--continue difficulty implementation: make it functional in the switch case
-
--fix spawn system
-
+-implement random and modify difficulty according
+-debug screen 
 -implement score system to show up on leds.
-- if screen problem stays, fix
--implement shooting, optional
+
+
 
 
 
