@@ -203,6 +203,34 @@ void user_isr( void )
 	
 
 
+	gameOver = crash(page);
+    while (gameOver){
+
+      
+      
+      T2CONCLR = 0x8000;
+      display_string(0, lost1);
+      display_string(1, lost2);
+	  
+      display_update();
+      
+      if (getbtns() == 0x1){
+        gameOver = 0;
+        menu = 1;
+		spawn = 0;
+		page = 0;
+		
+		
+        int i;
+        for (i = 0; i < 512; i++){
+          battlefield[i] = Reset[i];
+        }
+        delay(200);
+        T2CONSET = 0x8000;
+      }  
+    }
+
+
 	while(menu){
       T2CONCLR = 0x8000;
 
@@ -244,36 +272,7 @@ void user_isr( void )
 
 
     }
-	gameOver = crash(page);
-    while (gameOver){
-
-      
-      
-      T2CONCLR = 0x8000;
-      display_string(0, lost1);
-      display_string(1, lost2);
-	  
-      display_update();
-      
-      if (getbtns() == 0x1){
-        gameOver = 0;
-        menu = 1;
-		spawn = 0;
-		page = 0;
-		
-		
-        int i;
-        for (i = 0; i < 512; i++){
-          battlefield[i] = Reset[i];
-        }
-        delay(200);
-        T2CONSET = 0x8000;
-      } 
-	  
-       
-      
-	  
-    }
+	
   
   }
 
@@ -290,20 +289,23 @@ void user_isr( void )
 				
 			}
 			if (spawn2 == 10){
-				rocketsspawn(page);
+				
+				rocketsspawn(random);
+				spawn2 = 0;
 				
 			}
 			break;
 		
 		case 2:
-			if (spawn == 3){
+			if (spawn == 2){
 				
 				rocketsmove();
 				spawn = 0;
 				
 			}
-			if (spawn2 == 10){
-				rocketsspawn(page);
+			if (spawn2 == 4){
+				rocketsspawn(random);
+				
 				spawn2 = 0;
 			}
 			break;
@@ -315,8 +317,10 @@ void user_isr( void )
 				spawn = 0;
 				
 			}
-			if (spawn2 == 5){
-				rocketsspawn(page);
+			if (spawn2 == 2){
+				
+				rocketsspawn(random);
+				
 				spawn2 = 0;
 				
 			}
@@ -447,7 +451,7 @@ void labwork( void )
       page--;
       moveup(page);
       delay(150);
-	   
+	  
     }
     break;
 
@@ -462,6 +466,13 @@ void labwork( void )
   }
 	
  
+  
+ random++;
+ if (random > 3){
+	random = 0;
+ }
+  
+
 
 
 }
