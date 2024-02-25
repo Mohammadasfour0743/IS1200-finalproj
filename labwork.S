@@ -116,8 +116,8 @@ time2string:
   	nop
   	POP $a0	
   	sb $v0, 0($a0)
-  	
-  	
+
+	
   	
   	
   	

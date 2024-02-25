@@ -165,25 +165,33 @@ const uint8_t const rockets[] = {
 	231, 195, 195, 195, 195, 0, 0, 0,
 };
 
+const uint8_t const bullet[] = {
+	0, 0, 0, 0
+};
+
 
 
 int menu = 1;
 int page = 0;
 int random = 0;
-int spawn = 0;
+int speed = 0;
 int spawn2 = 0;
+int score = 0;
 
 int moveR = 0;
 
-char diffdis[] = "dif    text, texttexttext";
+char diffdis[] = "dif    text, texttexttext"; //to display difficulty
+
 
 char clear[] = " ";
-char line1[] = "Welcome Aboard!";
+char line1[] = "Welcome Aboard";
 char line2[] = "2 - start";
 char line3[] = "Difficulty: ";
 
 char lost1[] = "YOU DIED";
-char lost2[] = "2 to continue";
+char lost2[] = "Your Score:";
+char lost3[] = "2 to continue";
+
 
 int gameOver = 0;
 
@@ -198,7 +206,7 @@ void user_isr( void )
     IFS(0) = 0;
 	moveR++;
 	timeout++;
-	spawn++;
+	speed++;
 	spawn2++;
 	
 
@@ -209,15 +217,19 @@ void user_isr( void )
       
       
       T2CONCLR = 0x8000;
-      display_string(0, lost1);
-      display_string(1, lost2);
-	  
+      display_string(0, lost1);  
+	  display_string(3, lost3);
       display_update();
+	  
       
       if (getbtns() == 0x1){
         gameOver = 0;
         menu = 1;
-		spawn = 0;
+		speed = 0;
+		spawn2 = 0;
+		score = 0;
+		PORTE &= ~0xff;
+		
 		page = 0;
 		
 		
@@ -233,6 +245,9 @@ void user_isr( void )
 
 	while(menu){
       T2CONCLR = 0x8000;
+
+	  
+
 
 	  display_string(0, line1);
       display_string(1, line2);
@@ -272,62 +287,56 @@ void user_isr( void )
 
 
     }
-	
-  
-  }
 
-	
-	 
-  
 
-	switch (diff) {
+		switch (diff) {
 		case 1:
-			if (spawn == 5){
-				
+			if (speed == 5){		
 				rocketsmove();
-				spawn = 0;
-				
+				speed = 0;			
 			}
-			if (spawn2 == 10){
-				
+			if (spawn2 == 10){			
 				rocketsspawn(random);
-				spawn2 = 0;
-				
+				spawn2 = 0;			
 			}
 			break;
 		
 		case 2:
-			if (spawn == 2){
+			if (speed == 2){
 				
 				rocketsmove();
-				spawn = 0;
-				
+				speed = 0;				
 			}
 			if (spawn2 == 4){
-				rocketsspawn(random);
-				
+				rocketsspawn(random);	
 				spawn2 = 0;
 			}
 			break;
-		
 		case 3:
-			if (spawn == 1){
-				
+			if (speed == 1){
 				rocketsmove();
-				spawn = 0;
-				
+				speed = 0;	
 			}
 			if (spawn2 == 2){
-				
 				rocketsspawn(random);
-				
 				spawn2 = 0;
 				
 			}
-		
-
 	}
 	
+	
+  
+  } //end of flag
+
+	if (timeout == 10){
+		score++;
+		PORTE = score;
+		timeout = 0;
+	}
+	 
+  
+
+
 	
 	
   
@@ -346,6 +355,7 @@ void labinit( void )
    //part c
   volatile int* trise = (volatile int*) 0xbf886100;
   *trise = *trise & ~0xff;
+  PORTE &= ~0xff;
   //part e
   TRISDSET = 0xFE0;
 
@@ -409,19 +419,17 @@ int rocketsmove(void) {
   int i =0;
   int sections = 0;
   for (pages = 0; pages < 4; pages++){
-    for (sections = 1; sections < 6; sections++){ //devided the horizantal into 8 sections (16 * 8 = 128),
+    for (sections = 1; sections < 7; sections++){ //devided the horizantal into 8 sections (16 * 8 = 128),
    //and move everything except the section the spaceship is contained in
       for (i = 0; i < 16; i++){
         battlefield[i + 16 * sections + 128*pages] = battlefield[i + 16 * sections + 128*pages + 16];
         battlefield[i + 16 * sections + 128 * pages + 16] = erase[i];
-
       }
     }
-
-  }
-  
+  } 
   display_image(0, battlefield);
 }
+
 
 int crash(int page){
   int crashed = 0;
@@ -429,20 +437,13 @@ int crash(int page){
     crashed = 1;
   }
   
-  
-  
-  
   return crashed;
 }
+
 
 /* This function is called repetitively from the main program ###############################################################################################*/
 void labwork( void )
 {
-
- 
-  
-  
-  
 
   switch (getbtns())
   {
@@ -461,11 +462,26 @@ void labwork( void )
       movedown(page);
       delay(150);
 	  
+	  
     }
     break;
   }
+
+  
 	
- 
+  if (getsw() == 0x1){
+	speed = 0;
+	  spawn2 = 0;
+	  page = 0;
+	  int i;
+	  for (i = 0; i < 512; i++){
+          battlefield[i] = Reset[i];
+        }
+	menu = 1;
+	
+	
+  }
+  
   
  random++;
  if (random > 3){

@@ -1,7 +1,8 @@
 to do:
--implement score system to show up on leds.
--choose between: Random spawn vs targeted spawn.
--adjust spawn and spawn2 accordingly 
+-fix score so when you go to menu mid game it resets
+-when time is 15, you won! screen displays
+-try to display score. see prime number lab
+
 
 
 
