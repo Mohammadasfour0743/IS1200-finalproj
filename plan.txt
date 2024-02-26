@@ -1,7 +1,10 @@
 to do:
--fix score so when you go to menu mid game it resets
+
+-try to display score. see prime number lab. use itoa function
+
 -when time is 15, you won! screen displays
--try to display score. see prime number lab
+
+
 
 
 
