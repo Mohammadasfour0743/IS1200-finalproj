@@ -41,10 +41,10 @@ extern const uint8_t const font[128*8];
 extern const uint8_t const icon[128];
 /* Declare text buffer for display output */
 extern char textbuffer[4][16];
-
+/*
 extern  uint8_t  battlefield[512];
 
-extern const uint8_t const Reset[512];
+extern  uint8_t  Reset[512];
 
 extern const uint8_t const spaceship[16];
 
@@ -52,7 +52,7 @@ extern const uint8_t const erase[16];
 
 extern const uint8_t const rockets[16];
 
-
+*/
 /* Declare functions written by students.
    Note: Since we declare these functions here,
    students must define their functions with the exact types
