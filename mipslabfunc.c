@@ -325,3 +325,85 @@ char * itoaconv( int num )
 
 
 
+
+const uint8_t const spaceship[] = {
+	219, 219, 219, 0, 0, 165, 165, 195,
+	195, 195, 195, 231, 231, 231, 231, 231,
+};
+
+const uint8_t const erase[] = {
+	255, 255, 255, 255, 255, 255, 255, 255,
+	255, 255, 255, 255, 255, 255, 255, 255,
+};
+
+const uint8_t const rockets[] = {
+	231, 231, 195, 195, 195, 16, 16, 16,
+	231, 195, 195, 195, 195, 0, 0, 0,
+};
+
+
+int movedown(int page){
+   
+    int i;
+    for (i =0; i < 16; i++) {
+    battlefield[i + (128 * page)] = spaceship[i];
+    battlefield[i + (128 * (page - 1))] = erase[i];
+    }
+  
+  display_image(0, battlefield);
+}
+
+int moveup(int page){
+   int i;
+    for (i =0; i < 16; i++) {
+    battlefield[i + (128 * (page))] = spaceship[i];
+    battlefield[i + (128 * (page + 1))] = erase[i];
+    }
+  
+  display_image(0, battlefield);
+}
+
+int rocketsspawn(int page){
+  int i =0;
+  for (i = 0; i < 16; i++){
+    battlefield[96 + i + (128 * page)] = rockets[i];
+  }
+  display_image(0, battlefield);
+}
+
+int rocketsmove(void) {
+  int pages = 0; //pages
+  int i =0;
+  int sections = 0;
+  for (pages = 0; pages < 4; pages++){
+    for (sections = 1; sections < 7; sections++){ //devided the horizantal into 8 sections (16 * 8 = 128),
+   //and move everything except the section the spaceship is contained in
+      for (i = 0; i < 16; i++){
+        battlefield[i + 16 * sections + 128*pages] = battlefield[i + 16 * sections + 128*pages + 16];
+        battlefield[i + 16 * sections + 128 * pages + 16] = erase[i];
+      }
+    }
+  } 
+  display_image(0, battlefield);
+}
+
+
+int crash(int page){
+  int crashed = 0;
+  if (battlefield[(128 * page) + 17] == 231){
+    crashed = 1;
+  }
+  
+  return crashed;
+}
+
+
+int hasWon(int count){
+  int w = 0; 
+
+  if(count==15){
+    w = 1;
+  }
+
+  return w;
+}
