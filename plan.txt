@@ -1,8 +1,10 @@
 to do:
 
--try to display score. see prime number lab. use itoa function
+-when time is 15, you won! screen displays. take code from sami
 
--when time is 15, you won! screen displays
+-finish draft
+
+-try to separate into different files
 
 
 

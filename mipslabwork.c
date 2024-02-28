@@ -174,19 +174,19 @@ int speed = 0;
 int spawn2 = 0;
 int score = 0;
 
-int moveR = 0;
+
 
 char diffdis[] = "dif    text, texttexttext"; //to display difficulty
 
 
 char clear[] = " ";
-char line1[] = "Welcome Aboard";
-char line2[] = "2 - start";
+char line1[] = " Welcome Aboard";
+char line2[] = "   2 - start";
 char line3[] = "Difficulty: ";
 
-char lost1[] = "YOU DIED";
+char lost1[] = "    YOU DIED";
 char lost2[] = "Your Score:";
-char lost3[] = "2 to continue";
+char lost3[] = "  2 - continue";
 
 
 int gameOver = 0;
@@ -200,7 +200,7 @@ void user_isr( void )
   if (IFS(0) & (1<<8)) { //interrupt flag. activated when an interrupt is detected. 8th bit is the important one
     
     IFS(0) = 0;
-	moveR++;
+	
 	timeout++;
 	speed++;
 	spawn2++;
@@ -213,12 +213,14 @@ void user_isr( void )
       
       
       T2CONCLR = 0x8000;
-      display_string(0, lost1);  
+      display_string(0, lost1); 
+	  display_string(1, lost2);
+	  display_string(2, itoaconv(score)); 
 	  display_string(3, lost3);
       display_update();
 	  
       
-      if (getbtns() == 0x1){
+      if (getbtns() == 0x2){
         gameOver = 0;
         menu = 1;
 		speed = 0;
@@ -246,14 +248,14 @@ void user_isr( void )
 
 
 	  display_string(0, line1);
-      display_string(1, line2);
-	  display_string(2, line3);
+      display_string(3, line2);
+	  display_string(1, line3);
 	  time2string(diffdis, diff);
-	  display_string(3, diffdis);
+	  display_string(2, diffdis);
       display_update();
 
 	  switch (getbtns()) {
-		case 0x2:
+		case 0x1:
 			if (diff > 1){
 				diff -= 1;
 				delay(200);
@@ -269,7 +271,7 @@ void user_isr( void )
 
 	  }
 
-      if (getbtns() == 0x01){
+      if (getbtns() == 0x02){
         display_string(0, clear);
         display_string(1, clear);
 		display_string(2, clear);
@@ -453,7 +455,7 @@ void labwork( void )
     }
     break;
 
-  case 0x2: //move down if the page is not at the bottom
+  case 0x1: //move down if the page is not at the bottom
     if (page < 3) {
       page++;
       movedown(page);
