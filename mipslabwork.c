@@ -184,10 +184,12 @@ char line1[] = " Welcome Aboard";
 char line2[] = "   2 - start";
 char line3[] = "Difficulty: ";
 
-char lost1[] = "    YOU DIED";
+char lost1[] = "   YOU DIED";
 char lost2[] = "Your Score:";
 char lost3[] = "  2 - continue";
 
+char won1[] = "VICTORY ACHIEVED";
+int win;
 
 int gameOver = 0;
 
@@ -205,13 +207,35 @@ void user_isr( void )
 	speed++;
 	spawn2++;
 	
+	win = hasWon(score); // checks if count has reached 15s, will enter loop
+    while (win){
+      T2CONCLR = 0x8000;
+      display_string(0, won1);  
+	  display_string(3, lost3);
+      display_update();
+	  
+      if (getbtns() == 0x2){
+		win = 0;
+        
+        menu = 1;
+		speed = 0;
+		spawn2 = 0;
+		score = 0;
+		PORTE &= ~0xff;
+		page = 0;
+		
+        int i;
+        for (i = 0; i < 512; i++){
+          battlefield[i] = Reset[i];
+        }
+        delay(200);
+        T2CONSET = 0x8000;
+      }  
+    }
 
 
 	gameOver = crash(page);
     while (gameOver){
-
-      
-      
       T2CONCLR = 0x8000;
       display_string(0, lost1); 
 	  display_string(1, lost2);
@@ -219,7 +243,6 @@ void user_isr( void )
 	  display_string(3, lost3);
       display_update();
 	  
-      
       if (getbtns() == 0x2){
         gameOver = 0;
         menu = 1;
@@ -227,9 +250,7 @@ void user_isr( void )
 		spawn2 = 0;
 		score = 0;
 		PORTE &= ~0xff;
-		
 		page = 0;
-		
 		
         int i;
         for (i = 0; i < 512; i++){
@@ -243,10 +264,6 @@ void user_isr( void )
 
 	while(menu){
       T2CONCLR = 0x8000;
-
-	  
-
-
 	  display_string(0, line1);
       display_string(3, line2);
 	  display_string(1, line3);
@@ -267,8 +284,6 @@ void user_isr( void )
 				diff += 1;
 				delay(200);
 			}
-
-
 	  }
 
       if (getbtns() == 0x02){
@@ -278,14 +293,9 @@ void user_isr( void )
 		display_string(3, clear);
         menu = 0;
         T2CONSET = 0x8000;
-		display_image(0, battlefield);
-        
-        
+		display_image(0, battlefield); 
       }
-
-
     }
-
 
 		switch (diff) {
 		case 1:
@@ -324,26 +334,15 @@ void user_isr( void )
 	
 	
   
-  } //end of flag
+  } 
 
 	if (timeout == 10){
 		score++;
 		PORTE = score;
 		timeout = 0;
 	}
-	 
-  
 
-
-	
-	
-  
   return;
-
-
-	
- 
-   
 }
 
 /* Lab-specific initialization goes here */
@@ -364,18 +363,13 @@ void labinit( void )
 
  IEC(0) |= 1 << 8; //to enable interrupts for timer 2. bit 8 of this register corresponds to timer2 enabler. | is used to preserve the rest of bits
 
-IPC(2) |= 0x28; //set priority to 7. bits 2-4 correspond to Timer2, set them to 111.
+ IPC(2) |= 0x28; //set priority to 7. bits 2-4 correspond to Timer2, set them to 111.
 
-IFS(0) = 0;//clear interrupt flag so no previous interrupt is handle when interrupts are enabled
-
-
+ IFS(0) = 0;//clear interrupt flag so no previous interrupt is handle when interrupts are enabled
 
   enable_interrupt(); //enable interrupt globally. code found in labwork.s
-  return;
-
-
+  return;  
   
-  return;
 }
 
 volatile int tickCount = 0;
@@ -436,6 +430,17 @@ int crash(int page){
   }
   
   return crashed;
+}
+
+
+int hasWon(int count){
+  int w = 0; 
+
+  if(count==15){
+    w = 1;
+  }
+
+  return w;
 }
 
 
