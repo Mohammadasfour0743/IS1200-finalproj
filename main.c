@@ -12,6 +12,7 @@
 
    For copyright and licensing, see file COPYING */
 
+
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
@@ -29,12 +30,12 @@ char diffdis[] = "dif    text, texttexttext"; //to display difficulty
 char clear[] = " ";
 
 char line1[] = " Welcome Aboard";
-char line2[] = "   2 - start";
+char line2[] = "   3 - start";
 char line3[] = "Difficulty: ";
 
 char lost1[] = "   YOU DIED";
 char lost2[] = "Your Score:";
-char lost3[] = "  2 - continue";
+char lost3[] = "  3 - continue";
 
 char won1[] = "VICTORY ACHIEVED";
 int win;
