@@ -15,27 +15,19 @@
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
-#include <stdlib.h>
-
-int mytime = 0x5957;
-
-
- 
 
 int menu = 1;
 int page = 0;
-//int random = 0;
 int speed = 0;
 int spawn2 = 0;
 int score = 0;
 
 static unsigned long int next = 1;
 
-
 char diffdis[] = "dif    text, texttexttext"; //to display difficulty
 
-
 char clear[] = " ";
+
 char line1[] = " Welcome Aboard";
 char line2[] = "   2 - start";
 char line3[] = "Difficulty: ";
@@ -190,9 +182,7 @@ void user_isr( void )
 				
 			}
 	}
-	
-	
-  
+	 
   } 
 	//Score system, written by Sami Al Saati
 	if (timeout == 10){ 
@@ -208,9 +198,6 @@ void user_isr( void )
 void labinit( void )
 {
 	/*all initialization was done in Lab 3 of the course*/
-
-	
-
 
    //part c
   volatile int* trise = (volatile int*) 0xbf886100;
@@ -248,8 +235,7 @@ void labwork( void )
     if (page > 0){
       page--;
       moveup(page);
-      delay(150);
-	  
+      delay(150); 
     }
     break;
 
@@ -257,9 +243,7 @@ void labwork( void )
     if (page < 3) {
       page++;
       movedown(page);
-      delay(150);
-	  
-	  
+      delay(150);  
     }
     break;
   }
@@ -275,10 +259,8 @@ void labwork( void )
 	  for (i = 0; i < 512; i++){
           battlefield[i] = Reset[i];
         }
-	menu = 1;
-		
+	menu = 1;		
   }
-  
 }
 
 /*random system based on the linear congruential generator. Written by Mohammad Asfour*/
