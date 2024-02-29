@@ -5,6 +5,8 @@
 
    Latest update 2015-08-28 by F Lundevall
 
+   //this file was updated by Mohammad Asfour and Sami Al Saati on 1/3/2024
+
    For copyright and licensing, see file COPYING */
 
 /* Declare display-related functions from mipslabfunc.c */
@@ -42,6 +44,7 @@ extern const uint8_t const icon[128];
 /* Declare text buffer for display output */
 extern char textbuffer[4][16];
 
+/*Declare bitmap arrays for the project*/
 extern  uint8_t  battlefield[512];
 
 extern  uint8_t  Reset[512];

@@ -326,7 +326,7 @@ char * itoaconv( int num )
 
 
 
-
+//all helper functions were written by Mohammad Asfour and Sami Al Saati
 
 int movedown(int page){
    

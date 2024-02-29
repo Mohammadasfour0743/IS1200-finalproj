@@ -8,6 +8,8 @@
 
    This file modified 2017-04-31 by Ture Teknolog 
 
+   this file was modified by Mohammad Asfour and Sami Al Saati in 1/3/2024
+
    For copyright and licensing, see file COPYING */
 
 #include <stdint.h>   /* Declarations of uint_32 and the like */
@@ -58,7 +60,8 @@ void user_isr( void )
 	timeout++;
 	speed++;
 	spawn2++;
-	
+
+	//winning screen, written by Sami Al Saati
 	win = hasWon(score); // checks if count has reached 15s, will enter loop
     while (win){
       T2CONCLR = 0x8000;
@@ -85,7 +88,7 @@ void user_isr( void )
       }  
     }
 
-
+	//gameOver screen, written by Mohammad Asfour
 	gameOver = crash(page);
     while (gameOver){
       T2CONCLR = 0x8000;
@@ -113,7 +116,7 @@ void user_isr( void )
       }  
     }
 
-
+	//menu screen, written by Mohammad Asfour
 	while(menu){
       T2CONCLR = 0x8000;
 	  display_string(0, line1);
@@ -148,7 +151,7 @@ void user_isr( void )
 		display_image(0, battlefield); 
       }
     }
-
+		/*difficulty system written by Mohammad Asfour*/
 		switch (diff) {
 		case 1:
 			if (speed == 5){		
@@ -187,8 +190,8 @@ void user_isr( void )
 	
   
   } 
-
-	if (timeout == 10){
+	//Score system, written by Sami Al Saati
+	if (timeout == 10){ 
 		score++;
 		PORTE = score;
 		timeout = 0;
@@ -200,6 +203,7 @@ void user_isr( void )
 /* Lab-specific initialization goes here */
 void labinit( void )
 {
+	/*all initialization was done in Lab 3 of the course*/
 
    //part c
   volatile int* trise = (volatile int*) 0xbf886100;
@@ -236,6 +240,7 @@ volatile int tickCount = 0;
 void labwork( void )
 {
 
+	//button input, written by Mohammad Asfour and Sami Al Saati
   switch (getbtns())
   {
   case 0x4: //move up if page is not at the top
@@ -259,7 +264,7 @@ void labwork( void )
   }
 
   
-	
+	//Switch input, written by Mohammad Asfour 
   if (getsw() == 0x1){
 	 speed = 0;
 	  spawn2 = 0;

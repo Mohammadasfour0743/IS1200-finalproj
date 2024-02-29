@@ -160,6 +160,7 @@ const uint8_t const icon[] = {
 	184, 69, 186, 69, 254, 80, 175, 217,
 };
 
+	/*Bitmap arrays were designed by Mohammad Asfour*/
 
  uint8_t battlefield[] = {
 	219, 219, 219, 0, 0, 165, 165, 195,
