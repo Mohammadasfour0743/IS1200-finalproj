@@ -16,7 +16,6 @@
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
-
 int menu = 1;
 int page = 0;
 int speed = 0;
@@ -24,6 +23,10 @@ int spawn2 = 0;
 int score = 0;
 
 static unsigned long int next = 1;
+
+void ssrand(unsigned int seed){
+	next = seed;
+}
 
 char diffdis[] = "dif    text, texttexttext"; //to display difficulty
 
@@ -212,7 +215,7 @@ void labinit( void )
  PR2 = 31250; // Period register: 80 000 000/256/10 (10 is the number of timeouts per second)
  TMR2 = 0; //to start from 0
 //seed initialzation for rand()
- srand(TMR2);
+ ssrand(TMR2);
 
  IEC(0) |= 1 << 8; //to enable interrupts for timer 2. bit 8 of this register corresponds to timer2 enabler. | is used to preserve the rest of bits
 
@@ -270,7 +273,4 @@ int rand(void) {
 	return (unsigned int)(next / 65536) % 36685;
 }
 
-void srand(unsigned int seed){
-	next = seed;
-}
 
